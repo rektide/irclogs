@@ -1,0 +1,12 @@
+15:39 < rektide> https://gist.github.com/rektide/6873677 is the problemset that i made myself
+15:43 < phy1729> rektide: it looks like you're used to perl regex
+15:43 < phy1729> see :h magic for most of the differences
+15:44 < phy1729> and :h perl-patterns
+15:44 < goldenwest> rektide: :g/,$/j<CR>100@:
+15:48 < goldenwest> rektide: or :v/]/j<CR>1000@:
+15:49 < goldenwest> rektide: now that I see you have commas at the end of blocks
+15:54 < accolade> rektide, capturing group brackets have to be escaped by default and are referenced with backslash:  :s/\(.*\)/\1\1
+15:56 < accolade> rektide, in the search regex part, newline is \n (not \r - but in the replacement part, it's \r - it sucks :)  )
+15:56 < romainl_> but it's esy to remember
+15:56 < Raimondi> or  :s/.*/&&  or :s/.*/\0\0
+16:08 < accolade> rektide, so, as goldenwest said:  :g/^\[.*,$/j    or (for example) :%s/^\[.*,\zs\n/ /    (<- trailing slash optional)
