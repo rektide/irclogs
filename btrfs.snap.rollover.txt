@@ -1,0 +1,26 @@
+15:19 < rektide> hello. after a btrfs subvolume snapshot, is there any way to assert that snapshot, to have the path specified migrate from whatever it 
+                 became back to the snapshot?
+15:20 < rektide> i can see a cp -aur from the snapshot into the "real" as a possibility, but i can also see "rolling back" (or rolling over) to a snapshot as 
+                 being something the fs might offer
+15:20 < darksatanic> rektide: Unmount the original subvol, mount the snapshot.
+15:21 < darksatanic> Optionally use mv to rename them.
+15:21 < rektide> hmm ok
+15:22 < darksatanic> An atomic replacement is somewhat complicated, and I'd guess probably won't happen (what happens to the programs that were using files 
+                     that got changed back?)
+15:22 < darksatanic> One untidy option would be to simply mount the new version on top of the old one, but any files that were open in the old mount will 
+                     remain so, and any changes to them won't get written to the new one.
+15:22 < rektide> i'd guess it wouldn't either but open files is literally the only excuse i can think of as why, and that seems like an easy cop out problem
+15:23 < rektide> all programs with open filehandles get some kind of error or signal or w/e
+15:23 < rektide> programs die horribly, done
+15:23 < rektide> preceed by a lazy umount and that's prety close to a real answer
+15:23 < darksatanic> Sure, but you can probably script that with lsof, kill, and then once you've done that much, you've got an FS that you can unmount and 
+                     remount again. :)
+15:23 < rektide> would that the fs have some kind of signal for: "hey, you are working on borrowed time, re-open your state"
+15:24 < rektide> also CRIU might be able to checkpoint, remount, restore
+15:24 < rektide> and CRIU will "magically" cause such reopening
+15:24  * rektide waves a wand
+15:24 < rektide> presto chango new FS for all you "running " programs
+15:25 < rektide> (Checkpoint Restore In Userspace)
+15:25 < rektide> ok well, i'm glad we've talked. i didn't think btrfs was going to try to tackle hacking snapshot remounts, indeed sounds like something 
+                 better left to OS and apps to negotiate
+15:26 < rektide> but it was fun hearing from you darksatanic, thanks, & got some creative juices flowing
