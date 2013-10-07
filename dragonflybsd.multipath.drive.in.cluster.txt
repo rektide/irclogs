@@ -1,0 +1,77 @@
+15:06 < rektide> i asked a probably very silly question on the mailing list about a multi-host capable hard drive
+15:07 < rektide> i guess my ask would be, can i look at whats happening today in hammer2 with wireshark
+15:09 < ftigeot> didn't see it
+15:09 < ftigeot> but you could do it in the past with SCSI disks/enclosures
+15:09 < rektide> and few were insane enough to try
+15:09 < ftigeot> not insane, rich
+15:10 < rektide> fewer still retained a plesant insanity and attained stability in the dischord
+15:10 < ftigeot> alpha clusters worked in this way with a shared storage bay for example
+15:10 < rektide> or just filthy fucking rich sure
+15:10 < ftigeot> and special filesystems
+15:12 < rektide> i thankfully am not going mad yet and did in fact write a post. took me considerably more time poking through mailing list archives to find it than i thought was due:
+15:12 < rektide> http://leaf.dragonflybsd.org/mailarchive/kernel/2013-07/msg00031.html
+15:13 < rektide> i am of course totally talking out my ass in this post. and sorry, i apologise, sorry. sorry.
+15:13 < ftigeot> np
+15:14 < ftigeot> I don't think dual-link pcie is possible
+15:14 < rektide> but i am curious enough to pop my head up again and say hi here
+15:14 < ftigeot> :)
+15:14 < rektide> if you're inventing virtual devices, why would you bother caring what pcie link you tie them do
+15:14 < rektide> you've already virtualized your actual resources interfaces to make a multiplicity
+15:14 < ftigeot> what you want to do could work with a san or sas devices
+15:14 < rektide> all you need is drivers on the other end
+15:14 < rektide> no i know what i'm talking about and it's happening
+15:14 < rektide> now
+15:14 < rektide> SFF-8639
+15:15 < rektide> ok that's a port. give me a moment to find a part for that port that has dual pci-e controllers
+15:16 <@dillon> ftigeot: I give this patch a 50-50 chance of fixing this crash.  If it doesn't I'll have to look at it more closely.
+15:16  * ftigeot not a pcie expert
+15:16 < ftigeot> dillon: ok, we'll see
+15:16 <@dillon> <-- lunch
+15:16 < ftigeot> enjoy
+15:17 < rektide> ftigeot: are you are of what SR-IOV peripherals are, what they do?
+15:17 < rektide> *are you aware of
+15:19 < ftigeot> I only know it's some virtualization stuff
+15:20 < ftigeot> and I've been mostly interested in real hw implementations so far. trying to read http://vt100.net/docs/aa-l619a-tk.txt
+15:22 < rektide> http://www.eetimes.com/document.asp?doc_id=1317420 discussing the formerly IDT now PMC Sierra 89HF32P08AG3 32-channel flash NVM Express chipset- PCIe Gen3 x4 or dual independent PCIe Gen3 x2 (active/active or active/standby) host interface
+15:23 < rektide> SR-IOV for the cpu is bus routing stuff, which is kind of boring things about getting peripherals connected to VMs. the interesting aspect is devices: a network card will on PCIe pretend to be a bunch of devices.
+15:27 < ftigeot> you want to see the same storage device on different vms ?
+15:27 < rektide> MR-IOV skips backwards and says those virtual peripherals attach to multiple-root devices, instead of as they used to all going to the same pci root
+15:28 <@ftigeot> tryin to clean up bool usage :)
+15:28 < rektide> i want to be using the same storage device from different computers
+15:29 < rektide> what you and I were talking about previously
+15:29 < rektide> clustered scsi filesystems
+15:30 <@ftigeot> that should be possible
+15:30 <@ftigeot> you'll need a cluster-aware filesystem for sure
+15:30 < rektide> that's kind of what i wanted to get  rumminating on
+15:30 < rektide> that's not at all kind of
+15:31 <@ftigeot> but you won't get real redundancy since all the pcie links are virtual
+15:31 < rektide> i exactly wanted to find a way to talk about using HAMMER to do clustered filesystems
+15:31 < rektide> you'll get redundant computers using a drive
+15:31 < rektide> the computers conversely or contra-outage-preventingly need replicated disks too
+15:31 <@ftigeot> that's a work in progress (hammer 2), you'll want to talk to dillon
+15:31 < rektide> i do
+15:31 < rektide> yes
+15:32 < rektide> but first i should grab an onhand microscope and see what i see
+15:32 <@ftigeot> I don't think he thought about using it with multipath devices
+15:32 < rektide> i'd doubt it
+15:32 <@ftigeot> more like synchronized independant storage devices
+15:32 <@ftigeot> (didn't dig deep)
+15:32 < rektide> hence my ignorant guesswork
+15:33 < rektide> we have synchronized data de facto
+15:33 < rektide> we just need synchronized meta-data in a clustered fs
+15:33 < rektide> but this is pedantics and i'm sorry and i apologise. i'm sorry i'm sorry i'm sorry.
+15:33 <@ftigeot> even data may not be synchronized
+15:33 <@ftigeot> don't be
+15:35 < rektide> the multiple virtual peripherals and any buffering / latency before dma happens to actually egress data will indeed represent some decoherency factor
+15:36 < rektide> but there is just one disk (pool of nand chips) being written to
+15:37 < rektide> we're both pointing fingers at coherency here
+15:37 < rektide> i think, i'd guess. clusters gotta... clust?
+15:39 < rektide> oh this is lame
+15:39 < rektide> so lame
+15:39 < rektide> run tow filesystems
+15:39 < rektide> *two
+15:39 < rektide> separate but equal and easily seizable
+15:39 <@marino> e
+15:40 <@Mr_Bond> I like bug clusters and I cannot lie
+15:41 < rektide> exactly so.
+--- Day changed Tue Oct 02 2013
