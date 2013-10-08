@@ -1,0 +1,22 @@
+18:03 < rektide> ok, so first qu.... flow bassed programming is what the channels name is.
+18:04 < rektide> ok. i'm glad you helm to higher principles over implementations
+18:04 < rektide> check, good move
+18:04 < rektide> second, i really am incredibly eager to start seeing some docs roll out w.r.t. the remote protocol for noflo
+18:04 < rektide> and that's basically all. hi.
+18:05 < rektide> https://github.com/noflo/noflo/issues/107
+18:06 < jonnor> rektide, anything in particular you are in need of or want to see?
+18:07 < jonnor> there are iframe and websocket implementations out, they probably show most of what is needed to hook in
+18:08 < rektide> i don't think any documentation is going to be better than me running noflo and a remote app and seeing it run and loading some wireshark to see the traffic passed. but having something central that sheds illumination, rather than me finding it myself, would be a great motivator and helpful if i want to talk to other non- major noflo players about what you all are up to
+18:10 < rektide> the mechanistics of how noflo talks are less interesting than what a flow based coordinator talks to the outside worlds for my use. for implementation use, definitely going to need some how docs too.
+18:10 < rektide> i forgot that it is very late in euro tz's now, poor timing here.
+18:15 < jonnor> rektide, what kind of use do you have in mind?
+18:15 < jonnor> yeah, I should be asleep
+18:15 < rektide> education of the asleep masses
+18:15 < rektide> awakening of the new zietgeist of human spirit
+18:15 < rektide> as we reform the way humans come to understand the systems of the world toolmakers string about them
+18:15 < rektide> of course
+18:15 < rektide> same as you, dummy
+18:16 < jonnor> :)
+18:16 < rektide> i'm interested in your tool coming to be more than a self-centric system and opening up to the outside world and i want to understand it and communicate undersatnding with other humans.
+18:18 < jonnor> I just want to be able to visualize, explore and program all the architectonic levels in complex systems from within one interconnected system
+18:19 < jonnor> from real-time DSP and control loops - to clouds of clusters
